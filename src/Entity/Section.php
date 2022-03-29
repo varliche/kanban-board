@@ -15,7 +15,7 @@ class Section
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'integer')]
     private $position;
 
     #[ORM\Column(type: 'string', length: 128)]
@@ -23,6 +23,10 @@ class Section
 
     #[ORM\Column(type: 'datetime')]
     private $addedOn;
+
+    #[ORM\OneToOne(targetEntity: Project::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $project_id;
 
     public function getId(): ?int
     {
@@ -34,7 +38,7 @@ class Section
         return $this->position;
     }
 
-    public function setPosition(?int $position): self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -61,6 +65,18 @@ class Section
     public function setAddedOn(\DateTimeInterface $addedOn): self
     {
         $this->addedOn = $addedOn;
+
+        return $this;
+    }
+
+    public function getProjectId(): ?Project
+    {
+        return $this->project_id;
+    }
+
+    public function setProjectId(Project $project_id): self
+    {
+        $this->project_id = $project_id;
 
         return $this;
     }
