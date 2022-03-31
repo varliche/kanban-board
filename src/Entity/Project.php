@@ -14,38 +14,72 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => 'projectList']
         ],
         'post' => [
-            'normalization_context' => ['groups' => 'projectListAdd']
+            'denormalization_context' => ['groups' => 'projectListAdd']
         ]
     ],
-
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'projectList']
+        ],
+        'patch' => [
+            'normalization_context' => ['groups' => 'projectListUpdate']
+        ],
+        'delete' => [
+            'denormalization_context' => ['groups' => 'projectDelete']
+        ]
+    ]
 )]
 class Project
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['projectList', 'projectListAdd'])]
-    private $id;
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate',
+        'projectDelete'
+    ])]
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 128, nullable: false)]
-    #[Groups(['projectList', 'projectListAdd'])]
-    private $name;
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
+    private ?string $name;
 
     #[ORM\Column(type: 'datetime', nullable: false)]
-    #[Groups(['projectList', 'projectListAdd'])]
+    #[Groups([
+        'projectList',
+        'projectListAdd'
+    ])]
     private $createdOn;
 
-    #[ORM\Column(type: 'date')]
-    #[Groups(['projectList', 'projectListAdd'])]
+    #[ORM\Column(type: 'date', nullable: false)]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
     private $startDate;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    #[Groups(['projectList', 'projectListAdd'])]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
     private $estimatedEndDate;
 
     #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['projectList', 'projectListAdd'])]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
     private $userId;
 
     public function getId(): ?int

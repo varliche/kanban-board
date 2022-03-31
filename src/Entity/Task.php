@@ -18,7 +18,7 @@ class Task
     private $id;
 
     #[ORM\Column(type: 'string', length: 128)]
-    private $libelle;
+    private ?string $libelle;
 
     #[ORM\Column(type: 'date')]
     private $dateButoir;
