@@ -2,34 +2,51 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'projectList']
+        ],
+        'post' => [
+            'normalization_context' => ['groups' => 'projectListAdd']
+        ]
+    ],
+
+)]
 class Project
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['projectList', 'projectListAdd'])]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 128)]
+    #[ORM\Column(type: 'string', length: 128, nullable: false)]
+    #[Groups(['projectList', 'projectListAdd'])]
     private $name;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[Groups(['projectList', 'projectListAdd'])]
     private $createdOn;
 
     #[ORM\Column(type: 'date')]
+    #[Groups(['projectList', 'projectListAdd'])]
     private $startDate;
 
     #[ORM\Column(type: 'date', nullable: true)]
+    #[Groups(['projectList', 'projectListAdd'])]
     private $estimatedEndDate;
 
     #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    #[Groups(['projectList', 'projectListAdd'])]
+    private $userId;
 
     public function getId(): ?int
     {
@@ -86,12 +103,12 @@ class Project
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
-    public function setUserId(User $user_id): self
+    public function setUserId(User $userId): self
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }

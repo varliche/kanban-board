@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource]
@@ -13,12 +14,15 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['projectList'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 64)]
+    #[Groups(['projectList'])]
     private $firstName;
 
     #[ORM\Column(type: 'string', length: 64)]
+    #[Groups(['projectList'])]
     private $lastName;
 
     #[ORM\Column(type: 'string', length: 128)]
