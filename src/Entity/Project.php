@@ -2,30 +2,85 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'projectList']
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => 'projectListAdd']
+        ]
+    ],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'projectList']
+        ],
+        'patch' => [
+            'normalization_context' => ['groups' => 'projectListUpdate']
+        ],
+        'delete' => [
+            'denormalization_context' => ['groups' => 'projectDelete']
+        ]
+    ]
+)]
 class Project
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate',
+        'projectDelete'
+    ])]
+    private ?int $id;
 
-    #[ORM\Column(type: 'string', length: 128)]
-    private $name;
+    #[ORM\Column(type: 'string', length: 128, nullable: false)]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
+    private ?string $name;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[Groups([
+        'projectList',
+        'projectListAdd'
+    ])]
     private $createdOn;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'date', nullable: false)]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
     private $startDate;
 
     #[ORM\Column(type: 'date', nullable: true)]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
     private $estimatedEndDate;
+
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'projectList',
+        'projectListAdd',
+        'projectListUpdate'
+    ])]
+    private $userId;
 
     public function getId(): ?int
     {
@@ -76,6 +131,18 @@ class Project
     public function setEstimatedEndDate(?\DateTimeInterface $estimatedEndDate): self
     {
         $this->estimatedEndDate = $estimatedEndDate;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(User $userId): self
+    {
+        $this->userId = $userId;
 
         return $this;
     }
