@@ -4,17 +4,41 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'taskList']
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => 'taskListUpdate']
+        ]
+    ],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'userList']
+        ],
+        'patch' => [
+            'normalization_context' => ['groups' => 'userListUpdate']
+        ],
+        'delete' => [
+            'denormalization_context' => ['groups' => 'userDelete']
+        ]
+    ]
+)]
 class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups([
+        'tagList'
+    ])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 128)]
