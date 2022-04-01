@@ -38,7 +38,8 @@ class Section
         'sectionList',
         'sectionListAdd',
         'sectionListUpdate',
-        'sectionDelete'
+        'sectionDelete',
+        'taskList'
     ])]
     private $id;
 

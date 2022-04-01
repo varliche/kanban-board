@@ -21,13 +21,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => 'userList']
+            'normalization_context' => ['groups' => 'taskList']
         ],
         'patch' => [
-            'normalization_context' => ['groups' => 'userListUpdate']
+            'normalization_context' => ['groups' => 'taskListUpdate']
         ],
         'delete' => [
-            'denormalization_context' => ['groups' => 'userDelete']
+            'denormalization_context' => ['groups' => 'taskDelete']
         ]
     ]
 )]
@@ -37,32 +37,57 @@ class Task
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups([
-        'tagList'
+        'tagList',
+        'taskList',
+        'taskListUpdate',
+        'taskDelete'
     ])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 128)]
+    #[Groups([
+        'taskList',
+        'taskListUpdate'
+    ])]
     private ?string $libelle;
 
     #[ORM\Column(type: 'date')]
+    #[Groups([
+        'taskList',
+        'taskListUpdate'
+    ])]
     private $dateButoir;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups([
+        'taskList',
+        'taskListUpdate'
+    ])]
     private $url;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups([
+        'taskList',
+        'taskListUpdate'
+    ])]
     private $note;
 
     #[ORM\OneToOne(targetEntity: Section::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $section_id;
+    #[Groups([
+        'taskList'
+    ])]
+    private $sectionId;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'task_id')]
-    private $tag_id;
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'taskId')]
+    #[Groups([
+        'taskList'
+    ])]
+    private $tagId;
 
     public function __construct()
     {
-        $this->tag_id = new ArrayCollection();
+        $this->tagId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,12 +145,12 @@ class Task
 
     public function getSectionId(): ?Section
     {
-        return $this->section_id;
+        return $this->sectionId;
     }
 
-    public function setSectionId(Section $section_id): self
+    public function setSectionId(Section $sectionId): self
     {
-        $this->section_id = $section_id;
+        $this->sectionId = $sectionId;
 
         return $this;
     }
@@ -135,13 +160,13 @@ class Task
      */
     public function getTagId(): Collection
     {
-        return $this->tag_id;
+        return $this->tagId;
     }
 
     public function addTagId(Tag $tagId): self
     {
-        if (!$this->tag_id->contains($tagId)) {
-            $this->tag_id[] = $tagId;
+        if (!$this->tagId->contains($tagId)) {
+            $this->tagId[] = $tagId;
             $tagId->addTaskId($this);
         }
 
@@ -150,7 +175,7 @@ class Task
 
     public function removeTagId(Tag $tagId): self
     {
-        if ($this->tag_id->removeElement($tagId)) {
+        if ($this->tagId->removeElement($tagId)) {
             $tagId->removeTaskId($this);
         }
 
