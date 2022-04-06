@@ -20,48 +20,37 @@ Les pré-requis essentiels pour la bonne exécution du projet sur un poste local
 
 ### Installation
 
-Les étapes pour installer l'API
+Les étapes pour installer l'API : 
 
 
-_exemple_: Executez la commande ``symfony server:start`` pour commencer ensuite [...]
+1) Executez la commande ``symfony check:requirements`` pour savoir quel composant vous devez installer.
 
+2) Ensuite, ``php bin/console doctrine:database:create`` pour créer votre base de données.
 
-Ensuite vous pouvez montrer ce que vous obtenez au final...
+3) Exécutez la commande ``php bin/console doctrine:migrations:migrate`` pour migrer le schéma créé.
+
+4) Enfin, générez les fixtures grâce à ``php bin/console doctrine:fixtures:load``
+
 
 ## Démarrage
 
-Dites comment faire pour lancer votre projet
+Executez la commande ``symfony server:start`` pour commencer ensuite se rendre sur http://localhost:8000/api
 
 ## Fabriqué avec
 
-Entrez les programmes/logiciels/ressources que vous avez utilisé pour développer votre projet
+* [Symfony](http://fony.com/releases/6.0) - Symfony 6 (back-end)
+* [API Platform](https://api-platform.com/) - Surcouche API
 
-_exemples :_
-* [Materialize.css](http://materializecss.com) - Framework CSS (front-end)
-* [Atom](https://atom.io/) - Editeur de textes
-
-## Contributing
-
-Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://example.org) pour savoir comment le faire.
 
 ## Versions
 Listez les versions ici 
 _exemple :_
-**Dernière version stable :** 5.0
-**Dernière version :** 5.1
-Liste des versions : [Cliquer pour afficher](https://github.com/your/project-name/tags)
-_(pour le lien mettez simplement l'URL de votre projets suivi de ``/tags``)_
+**Dernière version stable :** 1.5.7
+**Dernière version :** 1.5.6
 
 ## Auteurs
 Listez le(s) auteur(s) du projet ici !
-* **Jhon doe** _alias_ [@outout14](https://github.com/outout14)
-
-Lisez la liste des [contributeurs](https://github.com/your/project/contributors) pour voir qui à aidé au projet !
-
-_(pour le lien mettez simplement l'URL de votre projet suivi de ``/contirubors``)_
-
-## License
-
-Ce projet est sous licence ``exemple: WTFTPL`` - voir le fichier [LICENSE.md](LICENSE.md) pour plus d'informations
+* **Maxime VARLOTEAUX** _alias_ [@varliche](https://github.com/varliche)
+* **Adeline BRUNEAU** _alias_ [@adbruneau](https://github.com/adbruneau)
 
 
