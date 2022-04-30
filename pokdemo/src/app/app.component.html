@@ -1,0 +1,36 @@
+<div style="text-align:center"> 
+   <h1>
+   {{ title }}!
+   </h1>
+  </div>
+
+  <br>
+
+  <app-my-component></app-my-component>
+
+  <br>
+
+  <input readonly [(ngModel)]="id">
+
+  <br>
+
+  Mon id est {{id}}
+  <br>
+
+  <ul>
+   <li *ngFor="let poke of pokes">{{poke.name}}</li>
+  </ul>
+
+  <br>
+
+  <input [(ngModel)]="searchPokeName">
+  <select [(ngModel)]="selectedPokeId">
+   <option [value] ="poke.id" *ngFor="let poke of pokes">{{poke.name}}</option>
+  <option [value] ="poke.id" *ngFor="let poke of pokes | filterPokemonPipe:'name':searchPokeName">{{poke.name}}</option>
+
+  <br>
+
+  </select>
+  Mon pokemon sélectionné est {{selectedPokeId}}
+  <button (click)="go()">GO</button>
+  
